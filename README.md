@@ -1,3 +1,4 @@
 - Clone repo
+- Create a virtual environment
 - pip install requirements.txt
 - streamlit run script.py
