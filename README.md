@@ -1,1 +1,3 @@
 - Clone repo
+- pip install requirements.txt
+- streamlit run script.py
