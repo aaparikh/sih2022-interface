@@ -75,3 +75,7 @@ def load_data():
     return df
 
 df = load_data()
+#filterable fields
+#   ability to search using ps no., organization name
+#   ["Category","Domain Bucket"] will be multiselect
+#   "Submitted Idea Count" will be a range selector
