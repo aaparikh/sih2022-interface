@@ -28,7 +28,7 @@ def load_data():
         "Organization",
         "Description",
         "Category",
-        "Domain Bucket",
+        "Domain_Bucket",
         "Youtube Link",
         "Dataset Link",
         "PS No.",
@@ -79,3 +79,11 @@ df = load_data()
 #   ability to search using ps no., organization name
 #   ["Category","Domain Bucket"] will be multiselect
 #   "Submitted Idea Count" will be a range selector
+
+categories = sorted(df['Category'].unique())
+selected_categories = st.sidebar.multiselect("Category", categories, default=categories)
+domains = sorted(df['Domain_Bucket'].unique())
+selected_domains = st.sidebar.multiselect("Domain Bucket", domains, default=domains)
+
+df_filtered = df[(df.Category.isin(selected_categories)) & (df.Domain_Bucket.isin(selected_domains))]
+st.dataframe(df_filtered)
