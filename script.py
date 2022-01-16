@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import requests
 
 st.title('Smart India Hackathon 2022')
-
+st.subheader('Made with ❤️  by [Atharva Parikh](https://www.linkedin.com/in/aaparikh/)')
 st.markdown("""
 This app retrieves the list of the **Problem statements** from sih website
 * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn
@@ -59,13 +59,7 @@ def load_data():
                 yt_link = "NA"
             else:
                 yt_link = a['href'].strip()
-        # yt_link = inner_table_rows[4].td.a.href.text if inner_table_rows[4].td.a.href!="_" else "NA"
-        
-        # if(inner_table_rows[5].td.text):
-        #     dataset_link = "NA"    
-        # else:
-        #     a = inner_table_rows[5].td.find("a",href=True,text=True)
-        #     dataset_link = a['href'].strip()
+
         url_start = "https://www.sih.gov.in/uploads/psData/"
         dataset_link = url_start + inner_table_rows[5].td.a.text if inner_table_rows[5].td.a else "NA"
         
@@ -90,10 +84,6 @@ def load_data():
     return df
 
 df = load_data()
-#filterable fields
-#   ability to search using ps no., organization name
-#   ["Category","Domain Bucket"] will be multiselect
-#   "Submitted Idea Count" will be a double ended slider
 
 max_submissions = df['Submitted_Idea_Count'].values.max()
 if(max_submissions==0):
@@ -109,8 +99,20 @@ selected_domains = st.sidebar.multiselect("Domain Bucket", domains, default=doma
 organizations = sorted(df['Organization'].unique())
 selected_organizations = st.sidebar.multiselect("Organizations", organizations, default=organizations)
 
-search1 = st.text_input("PS No.", "")
+search1 = st.text_input("Search by PS Number")
 
 df_filtered = df[(df.Category.isin(selected_categories)) & (df.Domain_Bucket.isin(selected_domains)) & (df['Submitted_Idea_Count']>=submissions[0]) & (df['Submitted_Idea_Count']<=submissions[1]) & (df['Organization'].isin(selected_organizations)) & (df['PSNo'].str.contains(search1))]
 st.write("Hover over the cell to see more details")
 st.dataframe(df_filtered)
+
+def filedownload(df):
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
+    href = f'<a href="data:file/csv;base64,{b64}" download="SIH2022.csv">Download CSV File</a>'
+    return href
+st.download_button(
+     "Download this data as CSV",
+     filedownload(df_filtered)
+ )
+df = df.groupby(['Category','Domain_Bucket']).agg({'Submitted_Idea_Count':'sum'}).reset_index()
+st.dataframe(df)
