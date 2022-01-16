@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import requests
 
 st.title('Smart India Hackathon 2022')
-st.subheader('Made with ❤️  by [Atharva Parikh](https://www.linkedin.com/in/aaparikh/)')
+st.subheader('Made with 💻  by [Atharva Parikh](https://www.linkedin.com/in/aaparikh/)')
 st.markdown("""
 This app retrieves the list of the **Problem statements** from sih website
 * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn
