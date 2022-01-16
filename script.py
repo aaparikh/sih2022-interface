@@ -117,7 +117,7 @@ with col1:
     search1 = st.text_input('Search by PS Number')
 
 df_filtered = df[(df.Category.isin(selected_categories)) & (df.Domain_Bucket.isin(selected_domains)) & (df['Submitted_Idea_Count']>=submissions[0]) & (df['Submitted_Idea_Count']<=submissions[1]) & (df['Organization'].isin(selected_organizations)) & (df['PSNo'].str.contains(search1))]
-st.write("Hover over the cell to see more details")
+st.write("**ℹ️ Hover over the cell to see more details**")
 st.dataframe(df_filtered)
 
 # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
@@ -148,10 +148,18 @@ def summary():
             )  
     st.plotly_chart(fig2, use_container_width=True)
 
-st.download_button(
-    "Download this data as CSV",
-    filedownload(df_filtered)
-)
+col1, col2 = st.columns(2)
+with col1:
+    st.download_button(
+        "Download the entire table as CSV",
+        filedownload(df_filtered)
+    )
+
+with col2:
+    st.download_button(
+        "Download this filtered table as CSV",
+        filedownload(df_filtered)
+    )
 
 flag = st.checkbox("View Data Summary Plots")
 if(flag):
