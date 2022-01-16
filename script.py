@@ -8,8 +8,8 @@ import plotly.express as px
 
 # Setting Page Configuration 
 st.set_page_config(
-     page_title="SIH - 2022",
-     page_icon="👀",
+     page_title="SIH2022",
+     page_icon="💡",
      layout="wide",
  )
 
