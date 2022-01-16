@@ -29,10 +29,10 @@ def load_data():
         "Description",
         "Category",
         "Domain_Bucket",
-        "Youtube Link",
-        "Dataset Link",
-        "PS No.",
-        "Submitted Idea Count"
+        "YTLink",
+        "DataLink",
+        "PSNo",
+        "Submitted_Idea_Count"
     ]
 
     table = soup.find("table", {"id":"dataTablePS"})
@@ -52,11 +52,26 @@ def load_data():
         organization = inner_table_rows[1].td.text.strip()
         category = inner_table_rows[2].td.text.strip()
         domain_bucket = inner_table_rows[3].td.text.strip()
-        yt_link = inner_table_rows[4].td.a.text.strip() if inner_table_rows[4].td.a.text!="" else "NA"
-        dataset_link = inner_table_rows[5].td.a.text.strip() if inner_table_rows[5].td.a else "NA"
+        
+        #there will be one href link only
+        for a in inner_table_rows[4].td.find_all("a",href=True,text=True):
+            if a['href'] == "_":
+                yt_link = "NA"
+            else:
+                yt_link = a['href'].strip()
+        # yt_link = inner_table_rows[4].td.a.href.text if inner_table_rows[4].td.a.href!="_" else "NA"
+        
+        # if(inner_table_rows[5].td.text):
+        #     dataset_link = "NA"    
+        # else:
+        #     a = inner_table_rows[5].td.find("a",href=True,text=True)
+        #     dataset_link = a['href'].strip()
+        url_start = "https://www.sih.gov.in/uploads/psData/"
+        dataset_link = url_start + inner_table_rows[5].td.a.text if inner_table_rows[5].td.a else "NA"
+        
         tds = row.find_all("td")
         #from the outer table we need last third and last second field values
-        ps_number,submitted_idea_count = tds[-3].text.strip(), tds[-2].text.strip()
+        ps_number,submitted_idea_count = tds[-3].text.strip(), int(tds[-2].text.strip())
         each_row.append(organization)
         each_row.append(description)
         each_row.append(category)
@@ -70,7 +85,7 @@ def load_data():
         print(f"Row number {i} done")
 
     df = pd.DataFrame(data, columns=titles)
-    # df.to_csv("sih2022PS.csv", index=False)
+
     print(df.head())
     return df
 
@@ -78,12 +93,24 @@ df = load_data()
 #filterable fields
 #   ability to search using ps no., organization name
 #   ["Category","Domain Bucket"] will be multiselect
-#   "Submitted Idea Count" will be a range selector
+#   "Submitted Idea Count" will be a double ended slider
+
+max_submissions = df['Submitted_Idea_Count'].values.max()
+if(max_submissions==0):
+    max_submissions = 1
+submissions = st.sidebar.slider('Submitted Idea Count', value=[0,100])
 
 categories = sorted(df['Category'].unique())
 selected_categories = st.sidebar.multiselect("Category", categories, default=categories)
+
 domains = sorted(df['Domain_Bucket'].unique())
 selected_domains = st.sidebar.multiselect("Domain Bucket", domains, default=domains)
 
-df_filtered = df[(df.Category.isin(selected_categories)) & (df.Domain_Bucket.isin(selected_domains))]
+organizations = sorted(df['Organization'].unique())
+selected_organizations = st.sidebar.multiselect("Organizations", organizations, default=organizations)
+
+search1 = st.text_input("PS No.", "")
+
+df_filtered = df[(df.Category.isin(selected_categories)) & (df.Domain_Bucket.isin(selected_domains)) & (df['Submitted_Idea_Count']>=submissions[0]) & (df['Submitted_Idea_Count']<=submissions[1]) & (df['Organization'].isin(selected_organizations)) & (df['PSNo'].str.contains(search1))]
+st.write("Hover over the cell to see more details")
 st.dataframe(df_filtered)

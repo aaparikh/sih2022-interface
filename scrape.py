@@ -13,11 +13,11 @@ def load_data():
         "Organization",
         "Description",
         "Category",
-        "Domain Bucket",
-        "Youtube Link",
-        "Dataset Link",
-        "PS No.",
-        "Submitted Idea Count"
+        "Domain_Bucket",
+        "YTLink",
+        "DataLink",
+        "PSNo",
+        "Submitted_Idea_Count"
     ]
 
     table = soup.find("table", {"id":"dataTablePS"})
@@ -27,10 +27,6 @@ def load_data():
     data = []
     for i,row in enumerate(table_data):
         each_row = []
-        #test
-        # print("at row ", i)
-        # test = row.find("td", {"class":"colomn_border"})
-        # print('Row organization - ',test.text)
         table_start = row.find_all("td", {"class":"colomn_border"}, recursive=False)
         #need to dig deep in second item
         inner_table = table_start[1].find("table", {"id":"settings"})
@@ -41,11 +37,26 @@ def load_data():
         organization = inner_table_rows[1].td.text.strip()
         category = inner_table_rows[2].td.text.strip()
         domain_bucket = inner_table_rows[3].td.text.strip()
-        yt_link = inner_table_rows[4].td.a.text.strip() if inner_table_rows[4].td.a.text!="" else "NA"
-        dataset_link = inner_table_rows[5].td.a.text.strip() if inner_table_rows[5].td.a else "NA"
+        
+        #there will be one href link only
+        for a in inner_table_rows[4].td.find_all("a",href=True,text=True):
+            if a['href'] == "_":
+                yt_link = "NA"
+            else:
+                yt_link = a['href'].strip()
+        # yt_link = inner_table_rows[4].td.a.href.text if inner_table_rows[4].td.a.href!="_" else "NA"
+        
+        # if(inner_table_rows[5].td.text):
+        #     dataset_link = "NA"    
+        # else:
+        #     a = inner_table_rows[5].td.find("a",href=True,text=True)
+        #     dataset_link = a['href'].strip()
+        url_start = "https://www.sih.gov.in/uploads/psData/"
+        dataset_link = url_start + inner_table_rows[5].td.a.text if inner_table_rows[5].td.a else "NA"
+        
         tds = row.find_all("td")
         #from the outer table we need last third and last second field values
-        ps_number,submitted_idea_count = tds[-3].text.strip(), tds[-2].text.strip()
+        ps_number,submitted_idea_count = tds[-3].text.strip(), int(tds[-2].text.strip())
         each_row.append(organization)
         each_row.append(description)
         each_row.append(category)
@@ -59,6 +70,6 @@ def load_data():
         print(f"Row number {i} done")
 
     df = pd.DataFrame(data, columns=titles)
-    # df.to_csv("sih2022PS.csv", index=False)
+
     print(df.head())
     return df
