@@ -1,21 +1,19 @@
-from cProfile import label
-from cgitb import text
 import streamlit as st
 import pandas as pd
 import base64
-# import matplotlib.pyplot as plt
-# import seaborn as sns
 import numpy as np
 from bs4 import BeautifulSoup
 import requests
 import plotly.express as px
 
-
+# Setting Page Configuration 
 st.set_page_config(
      page_title="SIH - 2022",
      page_icon="👀",
      layout="wide",
  )
+
+# Adding a header image and display content
 st.image(
     'https://im.rediff.com/news/2016/dec/26smart-india.jpg',
     width=140,
@@ -24,13 +22,15 @@ st.title('Smart India Hackathon 2022')
 st.subheader('Made with :heart:  by [Atharva Parikh](https://www.linkedin.com/in/aaparikh/)')
 st.markdown("""
 This app retrieves the list of the **Problem statements** from sih website
-* **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn, requests, bs4
+* **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn, requests, bs4, plotly
 * **Data source:** [SIH website](https://www.sih.gov.in/sih2022PS).
 """)
 
+#Adding a sidebar
 st.sidebar.header('Filters')
 
-@st.cache
+#Function to get the data from the website
+@st.cache #cache the data to avoid repeated requests
 def load_data():
     url = "https://sih.gov.in/sih2022PS"
     html_content = requests.get(url).text
@@ -87,17 +87,18 @@ def load_data():
         each_row.append(dataset_link)
         each_row.append(ps_number)
         each_row.append(submitted_idea_count)
-        # print(each_row)
         data.append(each_row)
-        print(f"Row number {i} done")
+        # print(f"Row number {i} done")
 
+    #convert the list of lists to dataframe
     df = pd.DataFrame(data, columns=titles)
 
-    print(df.head())
+    # print(df.head())
     return df
 
 df = load_data()
 
+# Code for Filtering the data
 max_submissions = df['Submitted_Idea_Count'].values.max()
 if(max_submissions==0):
     max_submissions = 1
