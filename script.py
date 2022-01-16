@@ -7,11 +7,17 @@ import numpy as np
 from bs4 import BeautifulSoup
 import requests
 
+st.set_page_config(
+     page_title="SIH - 2022",
+     page_icon="👀",
+     layout="wide",
+ )
+
 st.title('Smart India Hackathon 2022')
-st.subheader('Made with 💻  by [Atharva Parikh](https://www.linkedin.com/in/aaparikh/)')
+st.subheader('Made with 💻  by [Atharva Parikh](https://www.linkedin.com/in/aaparikh/) 😛')
 st.markdown("""
 This app retrieves the list of the **Problem statements** from sih website
-* **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn
+* **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn, requests, bs4
 * **Data source:** [SIH website](https://www.sih.gov.in/sih2022PS).
 """)
 
@@ -99,12 +105,15 @@ selected_domains = st.sidebar.multiselect("Domain Bucket", domains, default=doma
 organizations = sorted(df['Organization'].unique())
 selected_organizations = st.sidebar.multiselect("Organizations", organizations, default=organizations)
 
-search1 = st.text_input("Search by PS Number")
+col1, col2, col3 = st.columns(3)
+with col1:
+    search1 = st.text_input('Search by PS Number')
 
 df_filtered = df[(df.Category.isin(selected_categories)) & (df.Domain_Bucket.isin(selected_domains)) & (df['Submitted_Idea_Count']>=submissions[0]) & (df['Submitted_Idea_Count']<=submissions[1]) & (df['Organization'].isin(selected_organizations)) & (df['PSNo'].str.contains(search1))]
 st.write("Hover over the cell to see more details")
 st.dataframe(df_filtered)
 
+# https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
 def filedownload(df):
     csv = df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
