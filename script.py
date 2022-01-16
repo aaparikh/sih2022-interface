@@ -1,11 +1,15 @@
+from cProfile import label
+from cgitb import text
 import streamlit as st
 import pandas as pd
 import base64
-import matplotlib.pyplot as plt
-import seaborn as sns
+# import matplotlib.pyplot as plt
+# import seaborn as sns
 import numpy as np
 from bs4 import BeautifulSoup
 import requests
+import plotly.express as px
+
 
 st.set_page_config(
      page_title="SIH - 2022",
@@ -122,9 +126,33 @@ def filedownload(df):
     b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
     href = f'<a href="data:file/csv;base64,{b64}" download="SIH2022.csv">Download CSV File</a>'
     return href
+
+def summary():
+    plot1 = df.groupby(['Domain_Bucket']).size()
+    fig = px.bar(plot1, 
+                x=plot1.index, 
+                y=plot1.values, 
+                labels={'y':'Number of PS', 'Domain_Bucket':'Domains'},
+                title="Domain-wise Problem Statement(PS) Count",
+                text = plot1.values,
+            )
+    st.plotly_chart(fig, use_container_width=True)
+
+    plot2 = df.groupby(['Category']).size()
+    fig2 = px.bar(plot2, 
+                x=plot2.index, 
+                y=plot2.values,
+                labels = {'y':'Number of PS', 'Category':'Categories'},
+                title="Category-wise Problem Statement(PS) Count",
+                text = plot2.values,
+            )  
+    st.plotly_chart(fig2, use_container_width=True)
+
 st.download_button(
-     "Download this data as CSV",
-     filedownload(df_filtered)
- )
-df = df.groupby(['Category','Domain_Bucket']).agg({'Submitted_Idea_Count':'sum'}).reset_index()
-st.dataframe(df)
+    "Download this data as CSV",
+    filedownload(df_filtered)
+)
+
+flag = st.checkbox("View Data Summary Plots")
+if(flag):
+    summary()
