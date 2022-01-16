@@ -162,6 +162,9 @@ with col2:
         filedownload(df_filtered)
     )
 
+#link to registration process pdf
+st.write("[View the Registration Process](https://www.sih.gov.in/pdf/IdeasubmissionprocessSIH2020.pdf)")
+
 flag = st.checkbox("View Data Summary Plots")
 if(flag):
     summary()
