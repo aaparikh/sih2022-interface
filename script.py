@@ -12,9 +12,12 @@ st.set_page_config(
      page_icon="👀",
      layout="wide",
  )
-
+st.image(
+    'https://im.rediff.com/news/2016/dec/26smart-india.jpg',
+    width=140,
+)
 st.title('Smart India Hackathon 2022')
-st.subheader('Made with 💻  by [Atharva Parikh](https://www.linkedin.com/in/aaparikh/) 😛')
+st.subheader('Made with :heart:  by [Atharva Parikh](https://www.linkedin.com/in/aaparikh/)')
 st.markdown("""
 This app retrieves the list of the **Problem statements** from sih website
 * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn, requests, bs4
