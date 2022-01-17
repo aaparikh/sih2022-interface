@@ -24,6 +24,7 @@ st.markdown("""
 This app retrieves the list of the **Problem statements** from sih website
 * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn, requests, bs4, plotly
 * **Data source:** [SIH website](https://www.sih.gov.in/sih2022PS).
+* *All the data is loaded on the go so any changes made on the official website will be reflected here.*
 """)
 
 #Adding a sidebar
