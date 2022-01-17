@@ -52,7 +52,7 @@ def load_data():
     table = soup.find("table", {"id":"dataTablePS"})
     #recursive = False is needed to avoid reading the inner tr tags
     table_data = table.tbody.find_all("tr",recursive=False)
-    print("Total rows are - ", len(table_data))
+    # print("Total rows are - ", len(table_data)) #logging
     data = []
     for i,row in enumerate(table_data):
         each_row = []
@@ -123,11 +123,15 @@ st.write("**ℹ️ Hover over/Click the cell to see more details**")
 st.dataframe(df_filtered)
 
 # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
-def filedownload(df):
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
-    href = f'<a href="data:file/csv;base64,{b64}" download="SIH2022.csv">Download CSV File</a>'
-    return href
+# def filedownload(df):
+#     csv = df.to_csv(index=False)
+#     b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
+#     href = f'<a href="data:file/csv;base64,{b64}" download="SIH2022.csv">Download CSV File</a>'
+#     return href
+
+@st.cache
+def convert_df(df):
+   return df.to_csv().encode('utf-8')
 
 def summary():
     plot1 = df.groupby(['Domain_Bucket']).size()
@@ -152,15 +156,28 @@ def summary():
 
 col1, col2 = st.columns(2)
 with col1:
+    csv = convert_df(df)
+
     st.download_button(
         "Download the entire table as CSV",
-        filedownload(df_filtered)
+        csv,
+        "sih_all_PS.csv",
+        "text/csv",
+        key='download-csv'
     )
+    # st.download_button(
+    #     "Download the entire table as CSV",
+    #     filedownload(df_filtered)
+    # )
 
 with col2:
+    csv2 = convert_df(df_filtered)
     st.download_button(
-        "Download this filtered table as CSV",
-        filedownload(df_filtered)
+        "Download the filtered table as CSV",
+        csv2,
+        "sih_filtered_PS.csv",
+        "text/csv",
+        key='download-csv'
     )
 
 #link to registration process pdf
