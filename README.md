@@ -1,6 +1,6 @@
 <h1> Samrt India Hackathon 2022 - Interface App </h1>
 
-<h2> I am just here to use it 👀 </h2>
+<h2> Just show me the damm thing 👀 </h2>
 <h3>Ouch! okay, here you go. Click on the link below to launch the application.</h3>
 <h3><a href="https://share.streamlit.io/aaparikh/sih2022-interface/main/script.py">SIH2022 Interface App 🚀</a></h3>
 
