@@ -122,13 +122,6 @@ df_filtered = df[(df.Category.isin(selected_categories)) & (df.Domain_Bucket.isi
 st.write("**ℹ️ Hover over/Click the cell to see more details**")
 st.dataframe(df_filtered)
 
-# https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
-# def filedownload(df):
-#     csv = df.to_csv(index=False)
-#     b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
-#     href = f'<a href="data:file/csv;base64,{b64}" download="SIH2022.csv">Download CSV File</a>'
-#     return href
-
 @st.cache
 def convert_df(df):
    return df.to_csv().encode('utf-8')
@@ -165,10 +158,6 @@ with col1:
         "text/csv",
         key='download-csv'
     )
-    # st.download_button(
-    #     "Download the entire table as CSV",
-    #     filedownload(df_filtered)
-    # )
 
 with col2:
     csv2 = convert_df(df_filtered)
