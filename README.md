@@ -6,6 +6,7 @@
 
 <h2> I wanna contribute </h2>
 <h3> Coool, here are some steps for you to follow </h3>
+
 - Create a virtual environment (optional but recommended)
 - Clone repo
 - pip install requirements.txt
