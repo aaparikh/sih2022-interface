@@ -119,7 +119,8 @@ with col1:
     search1 = st.text_input('Search by PS Number')
 
 df_filtered = df[(df.Category.isin(selected_categories)) & (df.Domain_Bucket.isin(selected_domains)) & (df['Submitted_Idea_Count']>=submissions[0]) & (df['Submitted_Idea_Count']<=submissions[1]) & (df['Organization'].isin(selected_organizations)) & (df['PSNo'].str.contains(search1))]
-st.write("**ℹ️ Hover over/Click the cell to see more details**")
+st.write("**ℹ️ Hover over/Click a cell to see more details**")
+st.write("Showing **{}** of **{}** problem ststements".format(len(df_filtered),len(df)))
 st.dataframe(df_filtered)
 
 @st.cache
