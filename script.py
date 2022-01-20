@@ -57,14 +57,6 @@ selected_tech_buckets = st.sidebar.multiselect("Select Tech Bucket", tech_bucket
 organizations = sorted(df['Ministry'].unique())
 selected_organizations = st.sidebar.multiselect("Select Ministry", organizations, default=organizations)
 
-#Improve filtering here
-# - filter by multiple SNo
-# - filter by a range of SNo
-# - filter by single SNo
-# col1, col2, col3 = st.columns(3)
-# with col1:
-#     search1 = st.text_input('Search by Sr. No.')
-
 df_filtered = df[(df.Category.isin(selected_categories)) & (df.Theme.isin(selected_themes)) & (df.Tech_Bucket.isin(selected_tech_buckets)) & (df.Ministry.isin(selected_organizations))]
 st.write("**ℹ️ Hover over/Click a cell to see more details**")
 st.write("Showing **{}** of **{}** problem ststements".format(len(df_filtered),len(df)))
@@ -104,6 +96,16 @@ def summary():
                 text = plot3.values,
             )  
     st.plotly_chart(fig3, use_container_width=True)
+
+    plot4 = df.groupby(['Ministry']).size()
+    fig4 = px.bar(plot4,
+                x=plot4.index,
+                y=plot4.values,
+                labels = {'y':'Number of PS', 'Ministry':'Ministries'},
+                title="Ministry-wise Problem Statement(PS) Count",
+                text = plot4.values,
+            )
+    st.plotly_chart(fig4, use_container_width=True)
 
 col1, col2 = st.columns(2)
 with col1:
