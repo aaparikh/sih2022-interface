@@ -18,7 +18,7 @@
 ## Appearance
 
 ### Light Theme
-![Light theme](https://github.com/aaparikh/sih2022-interface/blob/main/sih-light.png)
+<!-- ![Light theme](https://github.com/aaparikh/sih2022-interface/blob/main/sih-light.png) -->
 
 ### Dark Theme
-![Dark Theme](https://github.com/aaparikh/sih2022-interface/blob/main/sih-dark.png)
+<!-- ![Dark Theme](https://github.com/aaparikh/sih2022-interface/blob/main/sih-dark.png) -->
