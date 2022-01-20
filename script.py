@@ -87,16 +87,6 @@ def summary():
             )
     st.plotly_chart(fig2, use_container_width=True)
 
-    plot3 = df.groupby(['Category']).size()
-    fig3 = px.bar(plot3, 
-                x=plot3.index, 
-                y=plot3.values,
-                labels = {'y':'Number of PS', 'Category':'Categories'},
-                title="Category-wise Problem Statement(PS) Count",
-                text = plot3.values,
-            )  
-    st.plotly_chart(fig3, use_container_width=True)
-
     plot4 = df.groupby(['Ministry']).size()
     fig4 = px.bar(plot4,
                 x=plot4.index,
@@ -106,6 +96,16 @@ def summary():
                 text = plot4.values,
             )
     st.plotly_chart(fig4, use_container_width=True)
+
+    plot3 = df.groupby(['Category']).size()
+    fig3 = px.bar(plot3, 
+                x=plot3.index, 
+                y=plot3.values,
+                labels = {'y':'Number of PS', 'Category':'Categories'},
+                title="Category-wise Problem Statement(PS) Count",
+                text = plot3.values,
+            )  
+    st.plotly_chart(fig3, use_container_width=True)
 
 col1, col2 = st.columns(2)
 with col1:
