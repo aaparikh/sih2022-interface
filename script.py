@@ -23,7 +23,7 @@ st.subheader('Made with :heart:  by [Atharva Parikh](https://www.linkedin.com/in
 st.markdown("""
 This app retrieves the list of the **Problem statements** from sih website
 * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn, requests, bs4, plotly
-* **Data source:** [SIH website](https://sih.gov.in/viewAllProblemStatements22-12).
+* **Data source:** [SIH website](https://sih.gov.in/sih2022PS).
 * *All the data is loaded on the go so any changes made on the official website will be reflected here.*
 """)
 
@@ -33,7 +33,7 @@ st.sidebar.header('Filters')
 #Function to get the data from the website
 @st.cache #cache the data to avoid repeated requests
 def load_data():
-    url = "https://sih.gov.in/viewAllProblemStatements22-12"
+    url = "https://sih.gov.in/sih2022PS"
     html_content = requests.get(url).text
     soup = BeautifulSoup(html_content, "lxml")
 
