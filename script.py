@@ -23,7 +23,7 @@ st.subheader('Made with :heart:  by [Atharva Parikh](https://www.linkedin.com/in
 st.markdown("""
 This app retrieves the list of the **Problem statements** from sih website
 * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn, requests, bs4, plotly
-* **Data source:** [SIH website](https://sih.gov.in/viewAllProblemStatements22-12).
+* **Data source:** [SIH website](https://sih.gov.in/sih2022PS).
 * *All the data is loaded on the go so any changes made on the official website will be reflected here.*
 """)
 
@@ -33,21 +33,20 @@ st.sidebar.header('Filters')
 #Function to get the data from the website
 @st.cache #cache the data to avoid repeated requests
 def load_data():
-    url = "https://sih.gov.in/viewAllProblemStatements22-12"
+    url = "https://sih.gov.in/sih2022PS"
     html_content = requests.get(url).text
     soup = BeautifulSoup(html_content, "lxml")
 
     # titles of resulting table
     titles = [
         "SNO",
+        "PSNo",
         "Organization",
         "Description",
         "Category",
         "Domain_Bucket",
         "YTLink",
-        "DataLink",
-        "PSNo",
-        "Submitted_Idea_Count"
+        "DataLink"
     ]
 
     table = soup.find("table", {"id":"dataTablePS"})
@@ -58,13 +57,12 @@ def load_data():
     for i,row in enumerate(table_data):
         each_row = []
         table_start = row.find_all("td", {"class":"colomn_border"}, recursive=False)
-        each_row.append(table_start[0].text.strip())
+        each_row.append(table_start[0].text.strip()) #[0] -> S.No.
         #need to dig deep in second item
         inner_table = table_start[2].find("table", {"id":"settings"})
         inner_table_rows = inner_table.thead.find_all("tr")
         #now seperately extract the data from inner table
-        inner_row1 = inner_table_rows[0].find("div",{"class":"style-2"})
-        description = inner_row1.text.strip()
+        description = inner_table_rows[0].find("div",{"class":"style-2"}).text.strip()
         organization = inner_table_rows[1].td.text.strip()
         category = inner_table_rows[2].td.text.strip()
         domain_bucket = inner_table_rows[3].td.text.strip()
@@ -81,15 +79,14 @@ def load_data():
         
         tds = row.find_all("td")
         #from the outer table we need last third and last second field values
-        ps_number,submitted_idea_count = tds[-3].text.strip(), int(tds[-2].text.strip())
+        ps_number = tds[-2].text.strip()
+        each_row.append(ps_number)
         each_row.append(organization)
         each_row.append(description)
         each_row.append(category)
         each_row.append(domain_bucket)
         each_row.append(yt_link)
         each_row.append(dataset_link)
-        each_row.append(ps_number)
-        each_row.append(submitted_idea_count)
         data.append(each_row)
         # print(f"Row number {i} done")
 
@@ -102,10 +99,6 @@ def load_data():
 df = load_data()
 
 # Code for Filtering the data
-max_submissions = df['Submitted_Idea_Count'].values.max()
-if(max_submissions==0):
-    max_submissions = 1
-submissions = st.sidebar.slider('Submitted Idea Count', value=[0,100])
 
 categories = sorted(df['Category'].unique())
 selected_categories = st.sidebar.multiselect("Category", categories, default=categories)
@@ -120,7 +113,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     search1 = st.text_input('Search by PS Number')
 
-df_filtered = df[(df.Category.isin(selected_categories)) & (df.Domain_Bucket.isin(selected_domains)) & (df['Submitted_Idea_Count']>=submissions[0]) & (df['Submitted_Idea_Count']<=submissions[1]) & (df['Organization'].isin(selected_organizations)) & (df['PSNo'].str.contains(search1))]
+df_filtered = df[(df.Category.isin(selected_categories)) & (df.Domain_Bucket.isin(selected_domains)) & (df['Organization'].isin(selected_organizations)) & (df['PSNo'].str.contains(search1))]
 st.write("**ℹ️ Hover over/Click a cell to see more details**")
 st.write("Showing **{}** of **{}** problem ststements".format(len(df_filtered),len(df)))
 st.dataframe(df_filtered)
@@ -149,6 +142,16 @@ def summary():
                 text = plot2.values,
             )  
     st.plotly_chart(fig2, use_container_width=True)
+
+    plot3 = df.groupby(['Organization']).size()
+    fig3 = px.bar(plot3,
+                x=plot3.values,
+                y=plot3.index,
+                labels = {'y':'Number of PS', 'Organization':'Organizations'},
+                title="Organization-wise Problem Statement(PS) Count",
+                text = plot3.values,
+            )
+    st.plotly_chart(fig3, use_container_width=True)
 
 col1, col2 = st.columns(2)
 with col1:
