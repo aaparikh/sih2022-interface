@@ -1,4 +1,4 @@
-<h1> Samrt India Hackathon 2022 - Interface App </h1>
+<h1> Smart India Hackathon 2022 - Interface App </h1>
 
 <h2> Just show me the damm thing 👀 </h2>
 <h3>Ouch! okay, here you go. Click on the link below to launch the application.</h3>
