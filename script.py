@@ -33,7 +33,7 @@ st.sidebar.header('Filters')
 #Function to get the data from the website
 @st.cache #cache the data to avoid repeated requests
 def load_data():
-    url = "https://sih.gov.in/sih2022PS"
+    url = "https://sih.gov.in/sih2023PS"
     html_content = requests.get(url).text
     soup = BeautifulSoup(html_content, "lxml")
 
