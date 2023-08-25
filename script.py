@@ -8,7 +8,7 @@ import plotly.express as px
 
 # Setting Page Configuration 
 st.set_page_config(
-     page_title="SIH2022",
+     page_title="SIH2023",
      page_icon="💡",
      layout="wide",
  )
@@ -18,7 +18,7 @@ st.image(
     'https://im.rediff.com/news/2016/dec/26smart-india.jpg',
     width=140,
 )
-st.title('Smart India Hackathon 2022')
+st.title('Smart India Hackathon 2023')
 st.subheader('Made with :heart:  by [Atharva Parikh](https://www.linkedin.com/in/aaparikh/)')
 st.markdown("""
 This app retrieves the list of the **Problem statements** from sih website
@@ -101,13 +101,13 @@ df = load_data()
 # Code for Filtering the data
 
 categories = sorted(df['Category'].unique())
-selected_categories = st.sidebar.multiselect("Category", categories, default=categories)
+selected_categories = st.sidebar.multiselect("Category", categories)
 
 domains = sorted(df['Domain_Bucket'].unique())
-selected_domains = st.sidebar.multiselect("Domain Bucket", domains, default=domains)
+selected_domains = st.sidebar.multiselect("Domain Bucket", domains)
 
 organizations = sorted(df['Organization'].unique())
-selected_organizations = st.sidebar.multiselect("Organizations", organizations, default=organizations)
+selected_organizations = st.sidebar.multiselect("Organizations", organizations)
 
 col1, col2, col3 = st.columns(3)
 with col1:
