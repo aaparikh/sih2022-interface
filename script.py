@@ -101,13 +101,13 @@ df = load_data()
 # Code for Filtering the data
 
 categories = sorted(df['Category'].unique())
-selected_categories = st.sidebar.multiselect("Category", categories)
+selected_categories = st.sidebar.multiselect("Category", categories, default=categories)
 
 domains = sorted(df['Domain_Bucket'].unique())
-selected_domains = st.sidebar.multiselect("Domain Bucket", domains)
+selected_domains = st.sidebar.multiselect("Domain Bucket", domains, default=domains)
 
 organizations = sorted(df['Organization'].unique())
-selected_organizations = st.sidebar.multiselect("Organizations", organizations)
+selected_organizations = st.sidebar.multiselect("Organizations", organizations, default=organizations)
 
 col1, col2, col3 = st.columns(3)
 with col1:
