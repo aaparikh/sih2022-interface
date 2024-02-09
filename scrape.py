@@ -8,7 +8,7 @@ import plotly.express as px
 
 # Setting Page Configuration 
 st.set_page_config(
-     page_title="SIH2022",
+     page_title="SIH2023",
      page_icon="💡",
      layout="wide",
  )
@@ -18,12 +18,12 @@ st.image(
     'https://im.rediff.com/news/2016/dec/26smart-india.jpg',
     width=140,
 )
-st.title('Smart India Hackathon 2022')
+st.title('Smart India Hackathon 2023')
 st.subheader('Made with :heart:  by [Atharva Parikh](https://www.linkedin.com/in/aaparikh/)')
 st.markdown("""
 This app retrieves the list of the **Problem statements** from sih website
 * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn, requests, bs4, plotly
-* **Data source:** [SIH website](https://www.sih.gov.in/sih2022PS).
+* **Data source:** [SIH website](https://www.sih.gov.in/sih2023PS).
 * *All the data is loaded on the go so any changes made on the official website will be reflected here.*
 """)
 
@@ -33,7 +33,7 @@ st.sidebar.subheader('Category, Theme, Tech Bucket, Ministry')
 #Function to get the data from the website
 @st.cache #cache the data to avoid repeated requests
 def load_data():
-    url = "https://sih.gov.in/sih2022PS"
+    url = "https://sih.gov.in/sih2023PS"
     df = pd.read_html(url)[0]
     # print(df.head())
     return df
